@@ -44,6 +44,60 @@ counterApi.post("/", async (req, res) => {
   }
 });
 
+counterApi.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { value } = req.body;
+
+    if (!value || !Array.isArray(value)) {
+      return res.status(400).json({ error: "value must be an array of objects" });
+    }
+
+    const updatedCounter = await Counter.findByIdAndUpdate(
+      id,
+      { value },
+      { new: true } // return updated doc
+    );
+
+    if (!updatedCounter) {
+      return res.status(404).json({ error: "Counter not found" });
+    }
+
+    res.json({ message: "Counter updated successfully", counter: updatedCounter });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 👉 PATCH - update a single object inside the value array
+// counterApi.patch("/:counterId", async (req, res) => {
+//   try {
+//     const { counterId } = req.params;
+//     const updates = req.body; // { customers: 123, products: 456 }
+
+//     const updatedCounter = await Counter.findOneAndUpdate(
+//       { _id: counterId },
+//       {
+//         $set: {
+//           "value.$.customers": updates.customers,
+//           "value.$.products": updates.products,
+//           "value.$.countries": updates.countries,
+//         },
+//       },
+//       { new: true, runValidators: true }
+//     );
+
+//     if (!updatedCounter) {
+//       return res.status(404).json({ error: "Subdocument not found" });
+//     }
+
+//     res.json({ message: "Subdocument updated successfully", counter: updatedCounter });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+
 // // 👉 DELETE - remove counter by id
 // counterApi.delete("/:id", async (req, res) => {
 //   try {
