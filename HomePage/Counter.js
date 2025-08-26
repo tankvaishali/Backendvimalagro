@@ -11,7 +11,7 @@ const Counter = mongoose.model("Counter", Schema);
 const counterApi = express.Router();
 
 // 👉 GET all counters
-counterApi.get("/get", async (req, res) => {
+counterApi.get("/", async (req, res) => {
   try {
     const counters = await Counter.find();
     res.json(counters);
@@ -21,7 +21,7 @@ counterApi.get("/get", async (req, res) => {
 });
 
 // 👉 POST - Add new counter
-counterApi.post("/post", async (req, res) => {
+counterApi.post("/", async (req, res) => {
   try {
     const { value } = req.body || {};
 
@@ -39,7 +39,7 @@ counterApi.post("/post", async (req, res) => {
 });
 
 // 👉 DELETE - remove counter by id
-counterApi.delete("/delete/:id", async (req, res) => {
+counterApi.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
