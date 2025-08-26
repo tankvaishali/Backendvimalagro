@@ -15,5 +15,4 @@ app.use("/counter",counterApi)
 
 app.listen(8000, () => {
     console.log("server is running on localhost:8000");
-
 })

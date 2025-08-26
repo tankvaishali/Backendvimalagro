@@ -1,12 +1,18 @@
 import express from "express";
 import mongoose from "mongoose";
 
-const Schema = new mongoose.Schema({
-  value: { type: Number, required: true },
+const CounterSchema = new mongoose.Schema({
+  value: [
+    {
+      customers: { type: Number, required: true },
+      products: { type: Number, required: true },
+      countries: { type: Number, required: true },
+    },
+  ],
 });
 
 // ✅ Capitalize model name
-const Counter = mongoose.model("Counter", Schema);
+const Counter = mongoose.model("Counter", CounterSchema);
 
 const counterApi = express.Router();
 
@@ -25,8 +31,8 @@ counterApi.post("/", async (req, res) => {
   try {
     const { value } = req.body || {};
 
-    if (value === undefined) {
-      return res.status(400).json({ error: "value is required in body" });
+    if (!value || !Array.isArray(value)) {
+      return res.status(400).json({ error: "value must be an array of objects" });
     }
 
     const newCounter = new Counter({ value });
@@ -38,21 +44,22 @@ counterApi.post("/", async (req, res) => {
   }
 });
 
-// 👉 DELETE - remove counter by id
-counterApi.delete("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
+// // 👉 DELETE - remove counter by id
+// counterApi.delete("/:id", async (req, res) => {
+//   try {
+//     const { id } = req.params;
 
-    const deletedCounter = await Counter.findByIdAndDelete(id);
+//     const deletedCounter = await Counter.findByIdAndDelete(id);
 
-    if (!deletedCounter) {
-      return res.status(404).json({ error: "Counter not found" });
-    }
+//     if (!deletedCounter) {
+//       return res.status(404).json({ error: "Counter not found" });
+//     }
 
-    res.json({ message: "Counter deleted successfully", counter: deletedCounter });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+//     res.json({ message: "Counter deleted successfully", counter: deletedCounter });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
 
 export default counterApi;
