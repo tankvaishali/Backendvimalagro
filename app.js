@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors"
 import Connection from "./Mongodbdata/connection.js";
 import counterApi from "./HomePage/Counter.js";
+import faq from "./AboutusPage/faq.js";
 
 const app = express()
 app.use(express.json())
@@ -9,8 +10,8 @@ app.use(cors())
 Connection()
 
 
-app.use("/counter",counterApi)
-
+app.use("/counter",counterApi);
+app.use("/faq", faq);
 
 
 app.listen(8000, () => {
