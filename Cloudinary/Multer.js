@@ -29,9 +29,21 @@ export const uploadAboutus = multer({ storage: aboutusStorage });
 const TestimonialStorage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: "aboutus",
+    folder: "testimonial",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
     transformation: [{ width: 800, crop: "limit" }]
   }
 });
 export const Testimonialmulter = multer({ storage: TestimonialStorage }); 
+
+
+// ✅ certificate storage
+const certificatestorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "certificate",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    transformation: [{ width: 800, crop: "limit" }]
+  }
+});
+export const certificatemulter = multer({ storage: certificatestorage }); 
