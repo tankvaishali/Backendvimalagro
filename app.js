@@ -34,7 +34,7 @@ import faq from "./AboutusPage/faq.js";
 import ViewMorebtn from "./Product/Button.js";
 import AddProduct from "./Product/Product.js";
 import productImageRoute from "./Product/productImageRoute.js";
-
+import Aboutusimage from "./HomePage/Aboutus.js";
 
 const app = express();
 app.use(cors())
@@ -42,6 +42,8 @@ app.use(express.json());
 app.use("/view", ViewMorebtn);
 app.use("/counter", counterApi);
 app.use("/faq", faq);
+app.use("/aboutus", Aboutusimage)
+
 app.use("/api/products", AddProduct);
 app.use("/api/upload", productImageRoute);
 app.use(cors());
