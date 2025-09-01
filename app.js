@@ -35,6 +35,7 @@ import ViewMorebtn from "./Product/Button.js";
 import AddProduct from "./Product/Product.js";
 import productImageRoute from "./Product/productImageRoute.js";
 import Aboutusimage from "./HomePage/Aboutus.js";
+import TestimonialRouter from "./HomePage/Testimonial.js";
 
 const app = express();
 app.use(cors())
@@ -43,9 +44,9 @@ app.use("/view", ViewMorebtn);
 app.use("/counter", counterApi);
 app.use("/faq", faq);
 app.use("/aboutus", Aboutusimage)
-
 app.use("/api/products", AddProduct);
 app.use("/api/upload", productImageRoute);
+app.use("/testimonial", TestimonialRouter);
 app.use(cors());
 // ✅ Use Render's port, not hardcoded 8000
 const PORT = 8000;
