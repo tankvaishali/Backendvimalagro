@@ -23,4 +23,15 @@ const aboutusStorage = new CloudinaryStorage({
     transformation: [{ width: 800, crop: "limit" }]
   }
 });
-export const uploadAboutus = multer({ storage: aboutusStorage }); // 👈 named export
+export const uploadAboutus = multer({ storage: aboutusStorage }); 
+
+// ✅ Aboutus storage
+const TestimonialStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "aboutus",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    transformation: [{ width: 800, crop: "limit" }]
+  }
+});
+export const Testimonialmulter = multer({ storage: TestimonialStorage }); 
