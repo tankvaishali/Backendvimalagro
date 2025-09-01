@@ -37,7 +37,7 @@ import productImageRoute from "./Product/productImageRoute.js";
 
 
 const app = express();
-
+app.use(cors())
 app.use(express.json());
 app.use("/view", ViewMorebtn);
 app.use("/counter", counterApi);
