@@ -36,6 +36,7 @@ import AddProduct from "./Product/Product.js";
 import productImageRoute from "./Product/productImageRoute.js";
 import Aboutusimage from "./HomePage/Aboutus.js";
 import TestimonialRouter from "./HomePage/Testimonial.js";
+import certificatelist from "./HomePage/Certificates.js";
 
 const app = express();
 app.use(cors())
@@ -43,6 +44,7 @@ app.use(express.json());
 app.use("/view", ViewMorebtn);
 app.use("/counter", counterApi);
 app.use("/faq", faq);
+app.use("/certificate", certificatelist);
 app.use("/aboutus", Aboutusimage)
 app.use("/api/products", AddProduct);
 app.use("/api/upload", productImageRoute);
