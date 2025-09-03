@@ -47,3 +47,14 @@ const certificatestorage = new CloudinaryStorage({
   }
 });
 export const certificatemulter = multer({ storage: certificatestorage }); 
+
+
+const vimalaboutus = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "vimalaboutus",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    transformation: [{ width: 800, crop: "limit" }]
+  }
+});
+export const vimalaboutusmulter = multer({ storage: vimalaboutus }); 
