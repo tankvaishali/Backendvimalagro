@@ -2,17 +2,20 @@ import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cloudinary from "./cloudinary.js";
 
-// ✅ Product storage
 const productStorage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: "product", // 📁 Cloudinary folder for products
+    folder: "product",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
-    transformation: [{ width: 800, crop: "limit" }]
-  }
+    transformation: [{ width: 800, crop: "limit" }],
+    public_id: (req, file) =>
+      `${Date.now()}-${file.originalname.split(".")[0]}`,
+  },
 });
+
 const upload = multer({ storage: productStorage });
-export default upload;   // 👈 keep your existing default export
+
+export default upload;
 
 // ✅ Aboutus storage
 const aboutusStorage = new CloudinaryStorage({
@@ -23,7 +26,7 @@ const aboutusStorage = new CloudinaryStorage({
     transformation: [{ width: 800, crop: "limit" }]
   }
 });
-export const uploadAboutus = multer({ storage: aboutusStorage }); 
+export const uploadAboutus = multer({ storage: aboutusStorage });
 
 // ✅ Aboutus storage
 const TestimonialStorage = new CloudinaryStorage({
@@ -34,7 +37,7 @@ const TestimonialStorage = new CloudinaryStorage({
     transformation: [{ width: 800, crop: "limit" }]
   }
 });
-export const Testimonialmulter = multer({ storage: TestimonialStorage }); 
+export const Testimonialmulter = multer({ storage: TestimonialStorage });
 
 
 // ✅ certificate storage
