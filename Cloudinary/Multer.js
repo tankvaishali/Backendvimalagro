@@ -58,3 +58,13 @@ const vimalaboutus = new CloudinaryStorage({
   }
 });
 export const vimalaboutusmulter = multer({ storage: vimalaboutus }); 
+
+const Leaderlogostorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "leaderlogo",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    transformation: [{ width: 800, crop: "limit" }]
+  }
+});
+export const Leaderlogomulter = multer({ storage:Leaderlogostorage  }); 

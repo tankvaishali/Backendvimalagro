@@ -39,6 +39,7 @@ import TestimonialRouter from "./HomePage/Testimonial.js";
 import certificatelist from "./HomePage/Certificates.js";
 import Ourstory from "./AboutusPage/Ourstory.js";
 import vimalaboutusimage from "./AboutusPage/vimalabout.js";
+import Leaderlogo from "./AboutusPage/Leaderlogo.js";
 
 const app = express();
 app.use(cors())
@@ -54,6 +55,7 @@ app.use("/api/products", AddProduct);
 app.use("/api/upload", productImageRoute);
 app.use("/testimonial", TestimonialRouter);
 app.use("/vimalabout", vimalaboutusimage );
+app.use("/leaderlogo", Leaderlogo );
 app.use(cors());
 // ✅ Use Render's port, not hardcoded 8000
 const PORT = 8000;
