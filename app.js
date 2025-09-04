@@ -37,6 +37,9 @@ import productImageRoute from "./Product/productImageRoute.js";
 import Aboutusimage from "./HomePage/Aboutus.js";
 import TestimonialRouter from "./HomePage/Testimonial.js";
 import certificatelist from "./HomePage/Certificates.js";
+import Ourstory from "./AboutusPage/Ourstory.js";
+import vimalaboutusimage from "./AboutusPage/vimalabout.js";
+import Leaderlogo from "./AboutusPage/Leaderlogo.js";
 
 const app = express();
 app.use(cors())
@@ -46,9 +49,13 @@ app.use("/counter", counterApi);
 app.use("/faq", faq);
 app.use("/certificate", certificatelist);
 app.use("/aboutus", Aboutusimage)
+app.use("/aboutus", Aboutusimage)
+app.use("/ourstory", Ourstory)
 app.use("/api/products", AddProduct);
 app.use("/api/upload", productImageRoute);
 app.use("/testimonial", TestimonialRouter);
+app.use("/vimalabout", vimalaboutusimage );
+app.use("/leaderlogo", Leaderlogo );
 app.use(cors());
 // ✅ Use Render's port, not hardcoded 8000
 const PORT = 8000;
