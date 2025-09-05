@@ -42,7 +42,7 @@ vimalaboutusimage.post("/", vimalaboutusmulter.single("vimalaboutimage"), async 
 // ➡️ GET API (Fetch all images)
 vimalaboutusimage.get("/", async (req, res) => {
   try {
-    const data = await VimalAbout.find().sort({ createdAt: -1 });
+    const data = await VimalAbout.find().sort({ createdAt: 1 });
     res.status(200).json(data);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch images", details: err.message });
