@@ -1,61 +1,37 @@
 import mongoose, { Schema } from "mongoose";
 
-const SubproductSchema = new Schema({
-    subproductName: { type: String, required: true },
-    subproductImg: {
-        type: String,
-        public_id: String,
-    },
-    description: { type: String },
-    weight: { type: Number },
-});
-
-const RecipeSchema = new Schema({
-    recipeName: { type: String, required: true },
-    steps: [{ type: String }],
-    recipeMainImg: {
-        type: String,
-        public_id: String,
-    },
-    recipeSubImg: [
+const ProductSchema = new mongoose.Schema({
+    productName: { type: String, required: true },
+    productSizes: [{ type: String, required: true }],
+    productBanner: String,
+    productBanner_public_id: String,
+    banner2: String,
+    banner2_public_id: String,
+    howToMakeBanner: String,
+    howToMakeBanner_public_id: String,
+    productImages: [String],
+    productImages_public_id: [String],
+    subproducts: [
         {
-            type: String,
-            public_id: String,
+            subproductName: String,
+            subproductImg: String,
+            subproductImg_public_id: String,
+            description: String,
+            weight: String,
         },
     ],
-});
-
-const ProSchema = new Schema(
-    {
-        productBanner: {
-            type: String,
-            public_id: String,
+    recipes: [
+        {
+            recipeName: String,
+            steps: [String],
+            recipeMainImg: String,
+            recipeMainImg_public_id: String,
+            recipeSubImg: String,            // ✅ fix
+            recipeSubImg_public_id: String,  // ✅ fix
         },
-        productName: { type: String, required: true },
-        productImages: [
-            {
-                type: String,
-                public_id: String,
-            },
-        ],
-        productSizes: [{ type: String }],
+    ],
+}, { timestamps: true });
 
-        subproducts: [SubproductSchema],
-
-        banner2: {
-            type: String,
-            public_id: String,
-        },
-        howToMakeBanner: {
-            type: String,
-            public_id: String,
-        },
-
-        recipes: [RecipeSchema],
-    },
-    { timestamps: true }
-);
-
-const Product = mongoose.model("Product", ProSchema);
+const Product = mongoose.model("Product", ProductSchema);
 
 export default Product;

@@ -8,8 +8,6 @@ const productStorage = new CloudinaryStorage({
     folder: "product",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
     transformation: [{ width: 800, crop: "limit" }],
-    public_id: (req, file) =>
-      `${Date.now()}-${file.originalname.split(".")[0]}`,
   },
 });
 
