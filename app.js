@@ -40,10 +40,13 @@ import certificatelist from "./HomePage/Certificates.js";
 import Ourstory from "./AboutusPage/Ourstory.js";
 import vimalaboutusimage from "./AboutusPage/vimalabout.js";
 import Leaderlogo from "./AboutusPage/Leaderlogo.js";
+import homebannerRouter from "./HomePage/Homepagebanner.js";
 
 const app = express();
 app.use(cors())
 app.use(express.json());
+
+app.use("/homebanner",homebannerRouter);
 app.use("/view", ViewMorebtn);
 app.use("/counter", counterApi);
 app.use("/faq", faq);

@@ -69,3 +69,13 @@ const Leaderlogostorage = new CloudinaryStorage({
   }
 });
 export const Leaderlogomulter = multer({ storage:Leaderlogostorage  }); 
+
+const Bannerstorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "banners",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    transformation: [{ width: 800, crop: "limit" }]
+  }
+});
+export const Bannermulter = multer({ storage:Bannerstorage  }); 
