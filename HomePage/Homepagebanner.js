@@ -7,9 +7,9 @@ import cloudinary from "../Cloudinary/cloudinary.js";
 const homepagebannerSchema = new mongoose.Schema(
   {
     desktophomebanner: { type: String, required: true }, // Cloudinary URL
-    desktoppublic_id: { type: String, required: true }, // Cloudinary public_id
-    mobilehomebanner: { type: String, required: true }, // Cloudinary URL
-    mobilepublic_id: { type: String, required: true }, // Cloudinary public_id
+    desktoppublic_id: { type: String, required: true },  // Cloudinary public_id
+    mobilehomebanner: { type: String, required: true },  // Cloudinary URL
+    mobilepublic_id: { type: String, required: true },   // Cloudinary public_id
   },
   { timestamps: true }
 );
@@ -36,10 +36,10 @@ homebannerRouter.post(
       }
 
       const newBanner = new HomeBanner({
-        desktophomebanner: req.files.desktophomebanner[0].path, // Cloudinary URL
-        desktoppublic_id: req.files.desktophomebanner[0].filename, // public_id
-        mobilehomebanner: req.files.mobilehomebanner[0].path, // Cloudinary URL
-        mobilepublic_id: req.files.mobilehomebanner[0].filename, // public_id
+        desktophomebanner: req.files.desktophomebanner[0].path,
+        desktoppublic_id: req.files.desktophomebanner[0].filename,
+        mobilehomebanner: req.files.mobilehomebanner[0].path,
+        mobilepublic_id: req.files.mobilehomebanner[0].filename,
       });
 
       await newBanner.save();
@@ -58,12 +58,57 @@ homebannerRouter.post(
 // ➡️ GET API (Fetch All Banners)
 homebannerRouter.get("/", async (req, res) => {
   try {
-    const banners = await HomeBanner.find().sort({ createdAt: -1 });
+    const banners = await HomeBanner.find().sort({ createdAt: 1 });
     res.status(200).json(banners);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+// ➡️ PUT API (Update Homepage Banner + Cloudinary)
+homebannerRouter.put(
+  "/:id",
+  Bannermulter.fields([
+    { name: "desktophomebanner", maxCount: 1 },
+    { name: "mobilehomebanner", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    try {
+      const banner = await HomeBanner.findById(req.params.id);
+      if (!banner) {
+        return res.status(404).json({ error: "Banner not found" });
+      }
+
+      // ✅ Update desktop banner if provided
+      if (req.files.desktophomebanner) {
+        // remove old desktop from cloudinary
+        await cloudinary.uploader.destroy(banner.desktoppublic_id);
+
+        banner.desktophomebanner = req.files.desktophomebanner[0].path;
+        banner.desktoppublic_id = req.files.desktophomebanner[0].filename;
+      }
+
+      // ✅ Update mobile banner if provided
+      if (req.files.mobilehomebanner) {
+        // remove old mobile from cloudinary
+        await cloudinary.uploader.destroy(banner.mobilepublic_id);
+
+        banner.mobilehomebanner = req.files.mobilehomebanner[0].path;
+        banner.mobilepublic_id = req.files.mobilehomebanner[0].filename;
+      }
+
+      await banner.save();
+
+      res.status(200).json({
+        message: "Homepage banner updated successfully",
+        banner,
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+);
 
 
 // ➡️ DELETE API (Delete Banner + Cloudinary images)
