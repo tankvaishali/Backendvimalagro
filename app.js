@@ -43,6 +43,7 @@ import Leaderlogo from "./AboutusPage/Leaderlogo.js";
 import homebannerRouter from "./HomePage/Homepagebanner.js";
 import aboutbannerRouter from "./AboutusPage/Aboutpagebanner.js";
 import productbannerRouter from "./Product/Blogpagebanner.js";
+import blogbannerRouter from "./BlogPage/Blogpagebanner.js";
 
 const app = express();
 app.use(cors())
@@ -51,6 +52,7 @@ app.use(express.json());
 app.use("/homebanner",homebannerRouter);
 app.use("/aboutbanner",aboutbannerRouter);
 app.use("/productbanner",productbannerRouter);
+app.use("/blogbanner",blogbannerRouter);
 app.use("/view", ViewMorebtn);
 app.use("/counter", counterApi);
 app.use("/faq", faq);
