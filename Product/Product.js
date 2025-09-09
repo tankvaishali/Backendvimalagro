@@ -14,6 +14,15 @@ const safeParse = (data) => {
     }
 };
 
+const subproductFields = Array.from({ length: 10 }).map((_, i) => ({
+    name: `subproductImg_${i}`, maxCount: 1
+}));
+
+const recipeFieldspost = Array.from({ length: 10 }).flatMap((_, i) => [
+    { name: `recipeMainImg_${i}`, maxCount: 1 },
+    { name: `recipeSubImg_${i}`, maxCount: 1 },
+]);
+
 // ➡️ Create product
 productRoutes.post(
     "/add",
@@ -22,13 +31,33 @@ productRoutes.post(
         { name: "banner2", maxCount: 1 },
         { name: "howToMakeBanner", maxCount: 1 },
         { name: "productImages", maxCount: 10 },
-        { name: "subproductImg", maxCount: 10 },
-        { name: "recipeMainImg", maxCount: 10 },
-        { name: "recipeSubImg", maxCount: 10 },
+        ...subproductFields,
+        ...recipeFieldspost,
     ]),
     async (req, res) => {
         try {
             const body = req.body;
+
+            const subproducts = safeParse(body.subproducts).map((sub, i) => {
+                const file = req.files[`subproductImg_${i}`]?.[0];
+                return {
+                    ...sub,
+                    subproductImg: file ? file.path : null,
+                    subproductImg_public_id: file ? file.filename : null,
+                };
+            });
+
+            const recipes = safeParse(body.recipes).map((rec, i) => {
+                const mainFile = req.files[`recipeMainImg_${i}`]?.[0];
+                const subFile = req.files[`recipeSubImg_${i}`]?.[0];
+                return {
+                    ...rec,
+                    recipeMainImg: mainFile ? mainFile.path : null,
+                    recipeMainImg_public_id: mainFile ? mainFile.filename : null,
+                    recipeSubImg: subFile ? subFile.path : null,
+                    recipeSubImg_public_id: subFile ? subFile.filename : null,
+                };
+            });
 
             const newProduct = new Product({
                 productName: body.productName,
@@ -60,38 +89,8 @@ productRoutes.post(
                     ? req.files.productImages.map((img) => img.filename)
                     : [],
 
-                subproducts: safeParse(body.subproducts).map((sub, i) => ({
-                    ...sub,
-                    subproductImg:
-                        req.files?.subproductImg && req.files.subproductImg[i]
-                            ? req.files.subproductImg[i].path
-                            : null,
-                    subproductImg_public_id:
-                        req.files?.subproductImg && req.files.subproductImg[i]
-                            ? req.files.subproductImg[i].filename
-                            : null,
-                })),
-
-                recipes: safeParse(body.recipes).map((rec, i) => ({
-                    ...rec,
-                    recipeMainImg:
-                        req.files?.recipeMainImg && req.files.recipeMainImg[i]
-                            ? req.files.recipeMainImg[i].path
-                            : null,
-                    recipeMainImg_public_id:
-                        req.files?.recipeMainImg && req.files.recipeMainImg[i]
-                            ? req.files.recipeMainImg[i].filename
-                            : null,
-                    // ✅ Only take one subimage per recipe
-                    recipeSubImg:
-                        req.files?.recipeSubImg && req.files.recipeSubImg[i]
-                            ? req.files.recipeSubImg[i].path
-                            : null,
-                    recipeSubImg_public_id:
-                        req.files?.recipeSubImg && req.files.recipeSubImg[i]
-                            ? req.files.recipeSubImg[i].filename
-                            : null,
-                })),
+                subproducts,
+                recipes,
             });
 
             const saved = await newProduct.save();
@@ -101,6 +100,7 @@ productRoutes.post(
         }
     }
 );
+
 
 // ➡️ Get all products
 productRoutes.get("/", async (req, res) => {
@@ -123,6 +123,16 @@ productRoutes.get("/:id", async (req, res) => {
     }
 });
 
+const fields = Array.from({ length: 10 }).map((_, i) => ({
+    name: `subproductImg_${i}`,
+    maxCount: 1
+}));
+
+const recipeFields = Array.from({ length: 10 }).flatMap((_, i) => [
+    { name: `recipeMainImg_${i}`, maxCount: 1 },
+    { name: `recipeSubImg_${i}`, maxCount: 1 }
+]);
+
 // ➡️ Update product (supports file upload)
 productRoutes.put(
     "/:id",
@@ -131,112 +141,102 @@ productRoutes.put(
         { name: "banner2", maxCount: 1 },
         { name: "howToMakeBanner", maxCount: 1 },
         { name: "productImages", maxCount: 10 },
-        { name: "subproductImg", maxCount: 10 },
+        ...fields,
+        ...recipeFields,
         { name: "recipeMainImg", maxCount: 10 },
         { name: "recipeSubImg", maxCount: 10 },
     ]),
     async (req, res) => {
         try {
             const body = req.body;
-            const safeParse = (data) => {
-                try {
-                    return data ? JSON.parse(data) : [];
-                } catch {
-                    return [];
-                }
-            };
+            const product = await Product.findById(req.params.id);
+            if (!product) return res.status(404).json({ error: "Not found" });
 
-            // ✅ Load existing product
-            const existing = await Product.findById(req.params.id);
-            if (!existing) return res.status(404).json({ error: "Not found" });
+            // ✅ Update text fields
+            product.productName = body.productName || product.productName;
+            product.productSizes = safeParse(body.productSizes) || product.productSizes;
 
-            // ✅ Start with old data
-            const update = { ...existing._doc };
-
-            // ✅ Basic fields
-            if (body.productName) update.productName = body.productName;
-            if (body.productSizes) update.productSizes = safeParse(body.productSizes);
-
-            // ✅ Banners
+            // ✅ Replace productBanner
             if (req.files?.productBanner) {
-                if (existing.productBanner_public_id) {
-                    await cloudinary.uploader.destroy(existing.productBanner_public_id);
+                if (product.productBanner_public_id) {
+                    await cloudinary.uploader.destroy(product.productBanner_public_id);
                 }
-                update.productBanner = req.files.productBanner[0].path;
-                update.productBanner_public_id = req.files.productBanner[0].filename;
+                product.productBanner = req.files.productBanner[0].path;
+                product.productBanner_public_id = req.files.productBanner[0].filename;
             }
+
+            // ✅ Replace banner2
             if (req.files?.banner2) {
-                update.banner2 = req.files.banner2[0].path;
-                update.banner2_public_id = req.files.banner2[0].filename;
+                if (product.banner2_public_id) {
+                    await cloudinary.uploader.destroy(product.banner2_public_id);
+                }
+                product.banner2 = req.files.banner2[0].path;
+                product.banner2_public_id = req.files.banner2[0].filename;
             }
+
+            // ✅ Replace howToMakeBanner
             if (req.files?.howToMakeBanner) {
-                update.howToMakeBanner = req.files.howToMakeBanner[0].path;
-                update.howToMakeBanner_public_id =
-                    req.files.howToMakeBanner[0].filename;
+                if (product.howToMakeBanner_public_id) {
+                    await cloudinary.uploader.destroy(product.howToMakeBanner_public_id);
+                }
+                product.howToMakeBanner = req.files.howToMakeBanner[0].path;
+                product.howToMakeBanner_public_id = req.files.howToMakeBanner[0].filename;
             }
 
-            // ✅ Product Images
+            // ✅ Replace productImages
             if (req.files?.productImages) {
-                update.productImages = req.files.productImages.map((img) => img.path);
-                update.productImages_public_id = req.files.productImages.map(
-                    (img) => img.filename
-                );
+                if (Array.isArray(product.productImages_public_id)) {
+                    for (let id of product.productImages_public_id) {
+                        if (id) await cloudinary.uploader.destroy(id);
+                    }
+                }
+                product.productImages = req.files.productImages.map((img) => img.path);
+                product.productImages_public_id = req.files.productImages.map((img) => img.filename);
             }
 
-            // ✅ Subproducts
+            // ✅ Update subproducts (with images)
+            let parsedSubs = [];
             if (body.subproducts) {
-                const parsed = safeParse(body.subproducts);
-                update.subproducts = parsed.map((sub, i) => ({
-                    ...existing.subproducts[i]?._doc, // keep old values
-                    ...sub, // overwrite text fields
-                    subproductImg:
-                        req.files?.subproductImg && req.files.subproductImg[i]
-                            ? req.files.subproductImg[i].path
-                            : existing.subproducts[i]?.subproductImg || null,
-                    subproductImg_public_id:
-                        req.files?.subproductImg && req.files.subproductImg[i]
-                            ? req.files.subproductImg[i].filename
-                            : existing.subproducts[i]?.subproductImg_public_id || null,
-                }));
+                parsedSubs = safeParse(body.subproducts);
             }
 
-            // ✅ Recipes
-            if (body.recipes) {
-                const parsed = safeParse(body.recipes);
-                update.recipes = parsed.map((rec, i) => ({
-                    ...existing.recipes[i]?._doc, // keep old values
-                    ...rec,
-                    recipeMainImg:
-                        req.files?.recipeMainImg && req.files.recipeMainImg[i]
-                            ? req.files.recipeMainImg[i].path
-                            : existing.recipes[i]?.recipeMainImg || null,
-                    recipeMainImg_public_id:
-                        req.files?.recipeMainImg && req.files.recipeMainImg[i]
-                            ? req.files.recipeMainImg[i].filename
-                            : existing.recipes[i]?.recipeMainImg_public_id || null,
-                    recipeSubImg:
-                        req.files?.recipeSubImg && req.files.recipeSubImg[i]
-                            ? req.files.recipeSubImg[i].path
-                            : existing.recipes[i]?.recipeSubImg || null,
-                    recipeSubImg_public_id:
-                        req.files?.recipeSubImg && req.files.recipeSubImg[i]
-                            ? req.files.recipeSubImg[i].filename
-                            : existing.recipes[i]?.recipeSubImg_public_id || null,
-                }));
-            }
-
-            // ✅ Save merged update
-            const updated = await Product.findByIdAndUpdate(req.params.id, update, {
-                new: true,
+            // Build new subproducts array
+            const updatedSubs = parsedSubs.map((sub, i) => {
+                const file = req.files[`subproductImg_${i}`]?.[0];
+                return {
+                    ...sub,
+                    subproductImg: file
+                        ? file.path
+                        : product.subproducts[i]?.subproductImg,
+                    subproductImg_public_id: file
+                        ? file.filename
+                        : product.subproducts[i]?.subproductImg_public_id,
+                };
             });
 
+            product.subproducts = updatedSubs;
+            // ✅ Update recipes (with images)
+            let parsedRecipes = safeParse(body.recipes) || [];
+            const updatedRecipes = parsedRecipes.map((rec, i) => {
+                const mainFile = req.files[`recipeMainImg_${i}`]?.[0];
+                const subFile = req.files[`recipeSubImg_${i}`]?.[0];
+                return {
+                    ...rec,
+                    recipeMainImg: mainFile ? mainFile.path : product.recipes[i]?.recipeMainImg,
+                    recipeMainImg_public_id: mainFile ? mainFile.filename : product.recipes[i]?.recipeMainImg_public_id,
+                    recipeSubImg: subFile ? subFile.path : product.recipes[i]?.recipeSubImg,
+                    recipeSubImg_public_id: subFile ? subFile.filename : product.recipes[i]?.recipeSubImg_public_id,
+                };
+            });
+            product.recipes = updatedRecipes;
+
+            const updated = await product.save();
             res.json(updated);
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
     }
 );
-
 // ➡️ Delete product
 productRoutes.delete("/:id", async (req, res) => {
     try {
