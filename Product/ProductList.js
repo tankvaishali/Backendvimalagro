@@ -35,3 +35,23 @@ const ProductSchema = new mongoose.Schema({
 const Product = mongoose.model("Product", ProductSchema);
 
 export default Product;
+
+
+
+const Extra = mongoose.Schema({
+    productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product", // link to Product schema
+        required: true,
+    },
+    extrasubproducts: [
+        {
+            subproductName: String,
+            subproductImg: String,
+            subproductImg_public_id: String,
+            description: String,
+            weight: String,
+        },
+    ],
+})
+export const SubProduct = mongoose.model("ExtraSubProduct", Extra);
