@@ -75,7 +75,7 @@ const Bannerstorage = new CloudinaryStorage({
   params: {
     folder: "banners",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
-    transformation: [{ width: 800, crop: "limit" }]
+    transformation: []
   }
 });
 export const Bannermulter = multer({ storage:Bannerstorage  }); 
