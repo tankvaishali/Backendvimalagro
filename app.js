@@ -46,15 +46,17 @@ import productbannerRouter from "./Product/Blogpagebanner.js";
 import blogbannerRouter from "./BlogPage/Blogpagebanner.js";
 import contactbannerRouter from "./Contactpage/Contactbanner.js";
 import extraSubProductRoutes from "./Product/ExtraSubProduct.js";
+import blogRoutes from "./BlogPage/Blog.js";
 
 const app = express();
 app.use(cors())
 app.use(express.json());
-app.use("/homebanner",homebannerRouter);
-app.use("/aboutbanner",aboutbannerRouter);
-app.use("/productbanner",productbannerRouter);
-app.use("/blogbanner",blogbannerRouter);
-app.use("/contactbanner",contactbannerRouter);
+app.use("/homebanner", homebannerRouter);
+app.use("/aboutbanner", aboutbannerRouter);
+app.use("/productbanner", productbannerRouter);
+app.use("/blogbanner", blogbannerRouter);
+app.use("/api/blogs", blogRoutes);
+app.use("/contactbanner", contactbannerRouter);
 app.use("/view", ViewMorebtn);
 app.use("/counter", counterApi);
 app.use("/faq", faq);
@@ -66,8 +68,8 @@ app.use("/api/products", AddProduct);
 app.use("/api/upload", productImageRoute);
 app.use("/api/extrasubproducts", extraSubProductRoutes);
 app.use("/testimonial", TestimonialRouter);
-app.use("/vimalabout", vimalaboutusimage );
-app.use("/leaderlogo", Leaderlogo );
+app.use("/vimalabout", vimalaboutusimage);
+app.use("/leaderlogo", Leaderlogo);
 app.use(cors());
 // ✅ Use Render's port, not hardcoded 8000
 const PORT = 8000;
