@@ -26,6 +26,7 @@ blogRoutes.post(
     upload.fields([
         { name: "blogImage", maxCount: 1 },
         { name: "blogBanner", maxCount: 1 },
+        { name: "blogBannerMobile", maxCount: 1 },
         ...recipeFields,
     ]),
     async (req, res) => {
@@ -51,6 +52,11 @@ blogRoutes.post(
                 blogBanner: req.files?.blogBanner ? req.files.blogBanner[0].path : null,
                 blogBanner_public_id: req.files?.blogBanner
                     ? req.files.blogBanner[0].filename
+                    : null,
+
+                blogBannerMobile: req.files?.blogBannerMobile ? req.files.blogBannerMobile[0].path : null,
+                blogBannerMobile_public_id: req.files?.blogBannerMobile
+                    ? req.files.blogBannerMobile[0].filename
                     : null,
 
                 title: body.title,
@@ -94,6 +100,7 @@ blogRoutes.put(
     upload.fields([
         { name: "blogImage", maxCount: 1 },
         { name: "blogBanner", maxCount: 1 },
+        { name: "blogBannerMobile", maxCount: 1 },
         ...recipeFields,
     ]),
     async (req, res) => {
@@ -123,6 +130,13 @@ blogRoutes.put(
                 }
                 blog.blogBanner = req.files.blogBanner[0].path;
                 blog.blogBanner_public_id = req.files.blogBanner[0].filename;
+            }
+            if (req.files?.blogBannerMobile) {
+                if (blog.blogBannerMobile_public_id) {
+                    await cloudinary.uploader.destroy(blog.blogBannerMobile_public_id);
+                }
+                blog.blogBannerMobile = req.files.blogBannerMobile[0].path;
+                blog.blogBannerMobile_public_id = req.files.blogBannerMobile[0].filename;
             }
 
             // ✅ Update recipes
@@ -158,6 +172,9 @@ blogRoutes.delete("/:id", async (req, res) => {
         }
         if (deleted.blogBanner_public_id) {
             await cloudinary.uploader.destroy(deleted.blogBanner_public_id);
+        }
+        if (deleted.blogBannerMobile_public_id) {
+            await cloudinary.uploader.destroy(deleted.blogBannerMobile_public_id);
         }
 
         for (let rec of deleted.recipes || []) {

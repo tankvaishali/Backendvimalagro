@@ -22,10 +22,12 @@ const Schema = new mongoose.Schema(
         category: { type: String, required: true },
         blogBanner: { type: String, required: true },
         blogBanner_public_id: { type: String },
+        blogBannerMobile: { type: String, required: true },
+        blogBannerMobile_public_id: { type: String },
         recipes: [recipeSchema],
     },
     { timestamps: true }
 );
-    
+
 const BlogSchema = mongoose.model("Blog", Schema);
 export default BlogSchema;

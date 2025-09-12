@@ -7,7 +7,7 @@ const productStorage = new CloudinaryStorage({
   params: {
     folder: "product",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
-    transformation: [{ width: 800, crop: "limit" }],
+    // transformation: [{ width: 800, crop: "limit" }],
   },
 });
 
@@ -21,7 +21,7 @@ const aboutusStorage = new CloudinaryStorage({
   params: {
     folder: "aboutus", // 📁 Cloudinary folder for aboutus
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
-    transformation: [{ width: 800, crop: "limit" }]
+    // transformation: [{ width: 800, crop: "limit" }]
   }
 });
 export const uploadAboutus = multer({ storage: aboutusStorage }); 
@@ -32,7 +32,7 @@ const TestimonialStorage = new CloudinaryStorage({
   params: {
     folder: "testimonial",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
-    transformation: [{ width: 800, crop: "limit" }]
+    // transformation: [{ width: 800, crop: "limit" }]
   }
 });
 export const Testimonialmulter = multer({ storage: TestimonialStorage }); 
@@ -44,7 +44,7 @@ const certificatestorage = new CloudinaryStorage({
   params: {
     folder: "certificate",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
-    transformation: [{ width: 800, crop: "limit" }]
+    // transformation: [{ width: 800, crop: "limit" }]
   }
 });
 export const certificatemulter = multer({ storage: certificatestorage }); 
@@ -55,7 +55,7 @@ const vimalaboutus = new CloudinaryStorage({
   params: {
     folder: "vimalaboutus",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
-    transformation: [{ width: 800, crop: "limit" }]
+    // transformation: [{ width: 800, crop: "limit" }]
   }
 });
 export const vimalaboutusmulter = multer({ storage: vimalaboutus }); 
@@ -65,7 +65,7 @@ const Leaderlogostorage = new CloudinaryStorage({
   params: {
     folder: "leaderlogo",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
-    transformation: [{ width: 800, crop: "limit" }]
+    // transformation: [{ width: 800, crop: "limit" }]
   }
 });
 export const Leaderlogomulter = multer({ storage:Leaderlogostorage  }); 
