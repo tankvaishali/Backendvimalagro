@@ -47,6 +47,7 @@ import blogbannerRouter from "./BlogPage/Blogpagebanner.js";
 import contactbannerRouter from "./Contactpage/Contactbanner.js";
 import extraSubProductRoutes from "./Product/ExtraSubProduct.js";
 import blogRoutes from "./BlogPage/Blog.js";
+import ExtraSubHeading from "./Product/ExtraSubHeading.js";
 
 const app = express();
 app.use(cors())
@@ -67,6 +68,7 @@ app.use("/ourstory", Ourstory)
 app.use("/api/products", AddProduct);
 app.use("/api/upload", productImageRoute);
 app.use("/api/extrasubproducts", extraSubProductRoutes);
+app.use("/api/heading", ExtraSubHeading);
 app.use("/testimonial", TestimonialRouter);
 app.use("/vimalabout", vimalaboutusimage);
 app.use("/leaderlogo", Leaderlogo);

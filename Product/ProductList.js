@@ -36,8 +36,30 @@ const Product = mongoose.model("Product", ProductSchema);
 
 export default Product;
 
+/* EXTRA SUB_PRODUCT HEADING */
 
+const extraHeadingSchema = mongoose.Schema(
+    {
+        productId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+            required: true,
+        },
+        subproductTitle: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+    },
+    { timestamps: true }
+);
 
+// ✅ Prevent duplicate title for the same productId
+extraHeadingSchema.index({ productId: 1, subproductTitle: 1 }, { unique: true });
+
+export const Heading = mongoose.model("extraHeading", extraHeadingSchema)
+
+/* EXTRA SUB_PRODUCT */
 const Extra = mongoose.Schema({
     productId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -46,6 +68,7 @@ const Extra = mongoose.Schema({
     },
     extrasubproducts: [
         {
+            subproductTitle: String,
             subproductName: String,
             subproductImg: String,
             subproductImg_public_id: String,
