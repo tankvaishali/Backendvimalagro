@@ -9,6 +9,14 @@ const ProductSchema = new mongoose.Schema({
     banner2_public_id: String,
     howToMakeBanner: String,
     howToMakeBanner_public_id: String,
+
+    productBannerMobile: String,
+    productBannerMobile_public_id: String,
+    banner2Mobile: String,
+    banner2Mobile_public_id: String,
+    howToMakeBannerMobile: String,
+    howToMakeBannerMobile_public_id: String,
+
     productImages: [String],
     productImages_public_id: [String],
     subproducts: [

@@ -28,8 +28,11 @@ productRoutes.post(
     "/add",
     upload.fields([
         { name: "productBanner", maxCount: 1 },
+        { name: "productBannerMobile", maxCount: 1 },  // ✅ new
         { name: "banner2", maxCount: 1 },
+        { name: "banner2Mobile", maxCount: 1 },        // ✅ new
         { name: "howToMakeBanner", maxCount: 1 },
+        { name: "howToMakeBannerMobile", maxCount: 1 },// ✅ new
         { name: "productImages", maxCount: 10 },
         ...subproductFields,
         ...recipeFieldspost,
@@ -81,6 +84,31 @@ productRoutes.post(
                 howToMakeBanner_public_id: req.files?.howToMakeBanner
                     ? req.files.howToMakeBanner[0].filename
                     : null,
+
+
+                /* Mobile */
+                productBannerMobile: req.files?.productBannerMobile
+                    ? req.files.productBannerMobile[0].path
+                    : null,
+                productBannerMobile_public_id: req.files?.productBannerMobile
+                    ? req.files.productBannerMobile[0].filename
+                    : null,
+
+                banner2Mobile: req.files?.banner2Mobile
+                    ? req.files.banner2Mobile[0].path
+                    : null,
+                banner2Mobile_public_id: req.files?.banner2Mobile
+                    ? req.files.banner2Mobile[0].filename
+                    : null,
+
+                howToMakeBannerMobile: req.files?.howToMakeBannerMobile
+                    ? req.files.howToMakeBannerMobile[0].path
+                    : null,
+                howToMakeBannerMobile_public_id: req.files?.howToMakeBannerMobile
+                    ? req.files.howToMakeBannerMobile[0].filename
+                    : null,
+
+                /* End */
 
                 productImages: req.files?.productImages
                     ? req.files.productImages.map((img) => img.path)
@@ -138,13 +166,14 @@ productRoutes.put(
     "/:id",
     upload.fields([
         { name: "productBanner", maxCount: 1 },
+        { name: "productBannerMobile", maxCount: 1 },  // ✅ new
         { name: "banner2", maxCount: 1 },
+        { name: "banner2Mobile", maxCount: 1 },        // ✅ new
         { name: "howToMakeBanner", maxCount: 1 },
+        { name: "howToMakeBannerMobile", maxCount: 1 },// ✅ new
         { name: "productImages", maxCount: 10 },
-        ...fields,
-        ...recipeFields,
-        { name: "recipeMainImg", maxCount: 10 },
-        { name: "recipeSubImg", maxCount: 10 },
+        ...subproductFields,
+        ...recipeFieldspost,
     ]),
     async (req, res) => {
         try {
@@ -181,6 +210,33 @@ productRoutes.put(
                 }
                 product.howToMakeBanner = req.files.howToMakeBanner[0].path;
                 product.howToMakeBanner_public_id = req.files.howToMakeBanner[0].filename;
+            }
+
+            // ✅ Replace productBannerMobile
+            if (req.files?.productBannerMobile) {
+                if (product.productBannerMobile_public_id) {
+                    await cloudinary.uploader.destroy(product.productBannerMobile_public_id);
+                }
+                product.productBannerMobile = req.files.productBannerMobile[0].path;
+                product.productBannerMobile_public_id = req.files.productBannerMobile[0].filename;
+            }
+
+            // ✅ Replace banner2Mobile
+            if (req.files?.banner2Mobile) {
+                if (product.banner2Mobile_public_id) {
+                    await cloudinary.uploader.destroy(product.banner2Mobile_public_id);
+                }
+                product.banner2Mobile = req.files.banner2Mobile[0].path;
+                product.banner2Mobile_public_id = req.files.banner2Mobile[0].filename;
+            }
+
+            // ✅ Replace howToMakeBannerMobile
+            if (req.files?.howToMakeBannerMobile) {
+                if (product.howToMakeBannerMobile_public_id) {
+                    await cloudinary.uploader.destroy(product.howToMakeBannerMobile_public_id);
+                }
+                product.howToMakeBannerMobile = req.files.howToMakeBannerMobile[0].path;
+                product.howToMakeBannerMobile_public_id = req.files.howToMakeBannerMobile[0].filename;
             }
 
             // ✅ Replace productImages
@@ -252,7 +308,15 @@ productRoutes.delete("/:id", async (req, res) => {
         if (deleted.howToMakeBanner_public_id) {
             await cloudinary.uploader.destroy(deleted.howToMakeBanner_public_id);
         }
-
+        if (deleted.productBannerMobile_public_id) {
+            await cloudinary.uploader.destroy(deleted.productBannerMobile_public_id);
+        }
+        if (deleted.banner2Mobile_public_id) {
+            await cloudinary.uploader.destroy(deleted.banner2Mobile_public_id);
+        }
+        if (deleted.howToMakeBannerMobile_public_id) {
+            await cloudinary.uploader.destroy(deleted.howToMakeBannerMobile_public_id);
+        }
         if (Array.isArray(deleted.productImages_public_id)) {
             for (let id of deleted.productImages_public_id) {
                 if (id) await cloudinary.uploader.destroy(id);
