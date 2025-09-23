@@ -1,6 +1,6 @@
 import express from "express";
 import BlogSchema from "./BlogSchema.js";
-import upload from "../Cloudinary/Multer.js";
+import upload, { Blogupload } from "../Cloudinary/Multer.js";
 import cloudinary from "../Cloudinary/cloudinary.js";
 
 const blogRoutes = express.Router();
@@ -23,7 +23,7 @@ const recipeFields = Array.from({ length: 10 }).map((_, i) => ({
 // ➡️ Create Blog
 blogRoutes.post(
     "/add",
-    upload.fields([
+    Blogupload.fields([
         { name: "blogImage", maxCount: 1 },
         { name: "blogBanner", maxCount: 1 },
         { name: "blogBannerMobile", maxCount: 1 },
@@ -97,7 +97,7 @@ blogRoutes.get("/:id", async (req, res) => {
 // ➡️ Update blog
 blogRoutes.put(
     "/:id",
-    upload.fields([
+    Blogupload.fields([
         { name: "blogImage", maxCount: 1 },
         { name: "blogBanner", maxCount: 1 },
         { name: "blogBannerMobile", maxCount: 1 },

@@ -15,6 +15,19 @@ const upload = multer({ storage: productStorage });
 
 export default upload;
 
+
+const BlogStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "product",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    // transformation: [{ width: 800, crop: "limit" }],
+  },
+});
+
+export const Blogupload = multer({ storage: BlogStorage });
+
+
 // ✅ Aboutus storage
 const aboutusStorage = new CloudinaryStorage({
   cloudinary,
@@ -24,7 +37,8 @@ const aboutusStorage = new CloudinaryStorage({
     // transformation: [{ width: 800, crop: "limit" }]
   }
 });
-export const uploadAboutus = multer({ storage: aboutusStorage }); 
+export const uploadAboutus = multer({ storage: aboutusStorage });
+
 
 // ✅ Aboutus storage
 const TestimonialStorage = new CloudinaryStorage({
@@ -35,7 +49,7 @@ const TestimonialStorage = new CloudinaryStorage({
     // transformation: [{ width: 800, crop: "limit" }]
   }
 });
-export const Testimonialmulter = multer({ storage: TestimonialStorage }); 
+export const Testimonialmulter = multer({ storage: TestimonialStorage });
 
 
 // ✅ certificate storage
@@ -47,7 +61,7 @@ const certificatestorage = new CloudinaryStorage({
     // transformation: [{ width: 800, crop: "limit" }]
   }
 });
-export const certificatemulter = multer({ storage: certificatestorage }); 
+export const certificatemulter = multer({ storage: certificatestorage });
 
 
 const vimalaboutus = new CloudinaryStorage({
@@ -58,7 +72,7 @@ const vimalaboutus = new CloudinaryStorage({
     // transformation: [{ width: 800, crop: "limit" }]
   }
 });
-export const vimalaboutusmulter = multer({ storage: vimalaboutus }); 
+export const vimalaboutusmulter = multer({ storage: vimalaboutus });
 
 const Leaderlogostorage = new CloudinaryStorage({
   cloudinary,
@@ -68,7 +82,7 @@ const Leaderlogostorage = new CloudinaryStorage({
     // transformation: [{ width: 800, crop: "limit" }]
   }
 });
-export const Leaderlogomulter = multer({ storage:Leaderlogostorage  }); 
+export const Leaderlogomulter = multer({ storage: Leaderlogostorage });
 
 const Bannerstorage = new CloudinaryStorage({
   cloudinary,
@@ -78,4 +92,4 @@ const Bannerstorage = new CloudinaryStorage({
     // transformation: [{ width: 1920, crop: "limit" }]
   }
 });
-export const Bannermulter = multer({ storage:Bannerstorage  }); 
+export const Bannermulter = multer({ storage: Bannerstorage }); 
