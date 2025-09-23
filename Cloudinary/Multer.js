@@ -19,7 +19,7 @@ export default upload;
 const BlogStorage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: "product",
+    folder: "blog",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
     // transformation: [{ width: 800, crop: "limit" }],
   },
