@@ -13,7 +13,19 @@ const productStorage = new CloudinaryStorage({
 
 const upload = multer({ storage: productStorage });
 
-export default upload;
+const blogStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "blog",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    // transformation: [{ width: 800, crop: "limit" }],
+  },
+});
+
+const uploadblog = multer({ storage: productStorage });
+
+
+export default uploadblog;
 
 // ✅ Aboutus storage
 const aboutusStorage = new CloudinaryStorage({
