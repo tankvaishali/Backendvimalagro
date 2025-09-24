@@ -48,6 +48,7 @@ import contactbannerRouter from "./Contactpage/Contactbanner.js";
 import extraSubProductRoutes from "./Product/ExtraSubProduct.js";
 import blogRoutes from "./BlogPage/Blog.js";
 import ExtraSubHeading from "./Product/ExtraSubHeading.js";
+import aboutprinciple from "./AboutusPage/Principle.js";
 
 const app = express();
 app.use(cors())
@@ -65,6 +66,7 @@ app.use("/certificate", certificatelist);
 app.use("/aboutus", Aboutusimage)
 app.use("/aboutus", Aboutusimage)
 app.use("/ourstory", Ourstory)
+app.use("/principle", aboutprinciple)
 app.use("/api/products", AddProduct);
 app.use("/api/upload", productImageRoute);
 app.use("/api/extrasubproducts", extraSubProductRoutes);
