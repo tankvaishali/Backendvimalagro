@@ -87,7 +87,7 @@ export const Leaderlogomulter = multer({ storage: Leaderlogostorage });
 const Principlestorage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: "leaderlogo",
+    folder: "principle",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
     // transformation: [{ width: 800, crop: "limit" }]
   }
