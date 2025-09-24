@@ -15,7 +15,7 @@ const safeParse = (data) => {
 };
 
 // Define recipe image fields (max 10 recipes)
-const recipeFields = Array.from({ length: 10 }).map((_, i) => ({
+const recipeFields = Array.from({ length: 100 }).map((_, i) => ({
     name: `recipeImage_${i}`,
     maxCount: 1,
 }));

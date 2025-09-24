@@ -14,11 +14,11 @@ const safeParse = (data) => {
     }
 };
 
-const subproductFields = Array.from({ length: 10 }).map((_, i) => ({
+const subproductFields = Array.from({ length: 100 }).map((_, i) => ({
     name: `subproductImg_${i}`, maxCount: 1
 }));
 
-const recipeFieldspost = Array.from({ length: 10 }).flatMap((_, i) => [
+const recipeFieldspost = Array.from({ length: 100 }).flatMap((_, i) => [
     { name: `recipeMainImg_${i}`, maxCount: 1 },
     { name: `recipeSubImg_${i}`, maxCount: 1 },
 ]);
@@ -150,120 +150,6 @@ productRoutes.get("/:id", async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-
-const fields = Array.from({ length: 10 }).map((_, i) => ({
-    name: `subproductImg_${i}`,
-    maxCount: 1
-}));
-
-const recipeFields = Array.from({ length: 10 }).flatMap((_, i) => [
-    { name: `recipeMainImg_${i}`, maxCount: 1 },
-    { name: `recipeSubImg_${i}`, maxCount: 1 }
-]);
-
-
-// productRoutes.put(
-//     "/:id",
-//     upload.fields([
-//         { name: "productBanner", maxCount: 1 },
-//         { name: "productBannerMobile", maxCount: 1 },
-//         { name: "banner2", maxCount: 1 },
-//         { name: "banner2Mobile", maxCount: 1 },
-//         { name: "howToMakeBanner", maxCount: 1 },
-//         { name: "howToMakeBannerMobile", maxCount: 1 },
-//         { name: "productImages", maxCount: 10 },
-//         ...subproductFields,
-//         ...recipeFieldspost,
-//     ]),
-//     async (req, res) => {
-//         try {
-//             const body = req.body;
-//             const product = await Product.findById(req.params.id);
-//             if (!product) return res.status(404).json({ error: "Not found" });
-
-//             // ✅ Text fields
-//             product.productName = body.productName || product.productName;
-//             product.productSizes = safeParse(body.productSizes) || product.productSizes;
-
-//             // ✅ Replace single banners
-//             const replaceImage = async (field, file) => {
-//                 if (req.files?.[field]) {
-//                     if (product[`${field}_public_id`]) {
-//                         await cloudinary.uploader.destroy(product[`${field}_public_id`]);
-//                     }
-//                     product[field] = file.path;
-//                     product[`${field}_public_id`] = getPublicId(file);
-//                 }
-//             };
-
-//             await replaceImage("productBanner", req.files?.productBanner?.[0]);
-//             await replaceImage("banner2", req.files?.banner2?.[0]);
-//             await replaceImage("howToMakeBanner", req.files?.howToMakeBanner?.[0]);
-//             await replaceImage("productBannerMobile", req.files?.productBannerMobile?.[0]);
-//             await replaceImage("banner2Mobile", req.files?.banner2Mobile?.[0]);
-//             await replaceImage("howToMakeBannerMobile", req.files?.howToMakeBannerMobile?.[0]);
-
-//             // ✅ Replace productImages (multiple)
-// if (req.files?.productImages) {
-//     if (Array.isArray(product.productImages_public_id)) {
-//         for (let id of product.productImages_public_id) {
-//             if (id) await cloudinary.uploader.destroy(id);
-//         }
-//     }
-//     product.productImages = req.files.productImages.map((img) => img.path);
-//     product.productImages_public_id = req.files.productImages.map((img) => getPublicId(img));
-// }
-
-//             // ✅ Subproducts
-//             let parsedSubs = [];
-//             if (body.subproducts) {
-//                 parsedSubs = safeParse(body.subproducts);
-//             }
-
-//             product.subproducts = parsedSubs.map((sub, i) => {
-//                 const file = req.files[`subproductImg_${i}`]?.[0];
-//                 if (file) {
-//                     if (product.subproducts[i]?.subproductImg_public_id) {
-//                         cloudinary.uploader.destroy(product.subproducts[i].subproductImg_public_id);
-//                     }
-//                 }
-//                 return {
-//                     ...sub,
-//                     subproductImg: file ? file.path : product.subproducts[i]?.subproductImg,
-//                     subproductImg_public_id: file ? getPublicId(file) : product.subproducts[i]?.subproductImg_public_id,
-//                 };
-//             });
-
-//             // ✅ Recipes
-//             let parsedRecipes = safeParse(body.recipes) || [];
-//             product.recipes = parsedRecipes.map((rec, i) => {
-//                 const mainFile = req.files[`recipeMainImg_${i}`]?.[0];
-//                 const subFile = req.files[`recipeSubImg_${i}`]?.[0];
-
-//                 if (mainFile && product.recipes[i]?.recipeMainImg_public_id) {
-//                     cloudinary.uploader.destroy(product.recipes[i].recipeMainImg_public_id);
-//                 }
-//                 if (subFile && product.recipes[i]?.recipeSubImg_public_id) {
-//                     cloudinary.uploader.destroy(product.recipes[i].recipeSubImg_public_id);
-//                 }
-
-//                 return {
-//                     ...rec,
-//                     recipeMainImg: mainFile ? mainFile.path : product.recipes[i]?.recipeMainImg,
-//                     recipeMainImg_public_id: mainFile ? getPublicId(mainFile) : product.recipes[i]?.recipeMainImg_public_id,
-//                     recipeSubImg: subFile ? subFile.path : product.recipes[i]?.recipeSubImg,
-//                     recipeSubImg_public_id: subFile ? getPublicId(subFile) : product.recipes[i]?.recipeSubImg_public_id,
-//                 };
-//             });
-
-//             const updated = await product.save();
-//             res.json(updated);
-//         } catch (err) {
-//             res.status(400).json({ error: err.message });
-//         }
-//     }
-// );
-
 
 
 // ➡️ Update product (supports file upload)
