@@ -49,11 +49,13 @@ import extraSubProductRoutes from "./Product/ExtraSubProduct.js";
 import blogRoutes from "./BlogPage/Blog.js";
 import ExtraSubHeading from "./Product/ExtraSubHeading.js";
 import aboutprinciple from "./AboutusPage/Principle.js";
+import categoryRoutes from "./HomePage/OurCategories.js";
 
 const app = express();
 app.use(cors())
 app.use(express.json());
 app.use("/homebanner", homebannerRouter);
+app.use("/categories", categoryRoutes);
 app.use("/aboutbanner", aboutbannerRouter);
 app.use("/productbanner", productbannerRouter);
 app.use("/blogbanner", blogbannerRouter);

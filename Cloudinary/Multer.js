@@ -27,6 +27,16 @@ const BlogStorage = new CloudinaryStorage({
 
 export const Blogupload = multer({ storage: BlogStorage });
 
+const OurCategory = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "blog",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    // transformation: [{ width: 800, crop: "limit" }],
+  },
+});
+
+export const Category = multer({ storage: OurCategory });
 
 // ✅ Aboutus storage
 const aboutusStorage = new CloudinaryStorage({
