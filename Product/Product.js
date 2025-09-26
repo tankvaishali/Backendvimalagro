@@ -14,11 +14,11 @@ const safeParse = (data) => {
     }
 };
 
-const subproductFields = Array.from({ length: 100 }).map((_, i) => ({
+const subproductFields = Array.from({ length: 2000 }).map((_, i) => ({
     name: `subproductImg_${i}`, maxCount: 1
 }));
 
-const recipeFieldspost = Array.from({ length: 100 }).flatMap((_, i) => [
+const recipeFieldspost = Array.from({ length: 2000 }).flatMap((_, i) => [
     { name: `recipeMainImg_${i}`, maxCount: 1 },
     { name: `recipeSubImg_${i}`, maxCount: 1 },
 ]);
